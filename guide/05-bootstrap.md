@@ -7,7 +7,7 @@
 │                      Bootstrap Process                       │
 │                                                              │
 │  1. Bootstrap node starts                                    │
-│  2. Bootstrap runs control plane (API + etcd + kube-apiserver)│
+│  2. Bootstrap runs control plane (API, etcd, kube-apiserver) │
 │  3. Bootstrap provisions master nodes                        │
 │  4. Master nodes join the cluster                            │
 │  5. Control plane transitions to masters                     │

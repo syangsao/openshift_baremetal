@@ -5,23 +5,24 @@ This step installs Red Hat CoreOS (RHCOS) on each Dell R630 node using the boot.
 ## 4.1 Overview
 
 ```
-┌─────────────────┐         ┌─────────────────┐
-│  Provisioner    │         │  Dell R630      │
-│                 │         │                 │
-│  HTTP Server    │──HTTP──▶│  iDRAC          │
-│  :8080/*.ign    │         │  (Virtual Media)│
-│  :8081/*.iso    │         │                 │
-└─────────────────┘         └────────┬────────┘
-                                     │ KVM/IPMI
-                              ┌──────┴──────┐
-                              │  R630 Server │
-                              │              │
-                              │  Boot ISO   │
-                              │  Configure  │
-                              │  Network    │
-                              │  Install    │
-                              │  RHCOS      │
-                              └─────────────┘
+┌──────────────────────┐      ┌──────────────────────────┐
+│    Provisioner       │      │      Dell R630           │
+│                      │      │                          │
+│  HTTP Server         │      │  iDRAC                   │
+│                      │      │                          │
+│  :8080/*.ign    ────▶│      │  (Virtual Media)         │
+│  :8081/*.iso    ────▶│─────▶│                          │
+└──────────────────────┘      └──────────┬───────────────┘
+                                         │ KVM/IPMI
+                                   ┌─────┴───────┐
+                                   │ R630 Server  │
+                                   │              │
+                                   │  Boot ISO    │
+                                   │  Configure   │
+                                   │  Network      │
+                                   │  Install      │
+                                   │  RHCOS        │
+                                   └──────────────┘
 ```
 
 ## 4.2 Prepare Dell iDRAC
