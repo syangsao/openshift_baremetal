@@ -10,7 +10,7 @@
 | Control Plane (Master) | 3 | High-availability cluster management |
 | Compute (Worker) | 2+ (optional) | Application workloads |
 
-> **Note:** For a 3-node cluster, set `compute.replicas: 0` and run workloads on master nodes.
+> **Note:** For a 3-node cluster, set `compute.replicas: 0` and run workloads on master nodes. See [Step 8: Three-Node Cluster](08-three-node-cluster.md).
 
 ### Dell R630 Specifications
 

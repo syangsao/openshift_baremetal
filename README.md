@@ -31,6 +31,7 @@ Step-by-step instructions for installing **OpenShift Container Platform 4.21** o
 5. **[Bootstrap & Installation](guide/05-bootstrap.md)** — Wait for bootstrap completion
 6. **[CSR Approval](guide/06-csr-approval.md)** — Approve node certificates
 7. **[Verification](guide/07-verification.md)** — Post-installation checks
+8. **[Three-Node Cluster](guide/08-three-node-cluster.md)** — Configure a 3-node cluster (no workers)
 
 ## Minimum Hardware Requirements
 
