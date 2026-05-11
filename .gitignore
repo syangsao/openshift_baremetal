@@ -1,0 +1,32 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Generated configs
+terraform/haproxy/haproxy.cfg
+terraform/haproxy/haproxy.cfg.tpl.bak
+terraform/dns/*.zone
+terraform/dns/forward.zone.tpl.bak
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Terraform plan files
+*.tfplan
+
+# SSH keys (never commit)
+id_ed25519
+id_ed25519.pub
+
+# Credentials
+terraform.tfvars.bak
+*.secret

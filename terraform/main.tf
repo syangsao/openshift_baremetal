@@ -6,11 +6,18 @@ terraform {
       source  = "hashicorp/null"
       version = "~> 3.1"
     }
-    template = {
-      source  = "hashicorp/template"
+    local = {
+      source  = "hashicorp/local"
       version = "~> 2.2"
     }
   }
+}
+
+locals {
+  all_nodes   = setunion([var.bootstrap_ip], set(var.master_ips), set(var.worker_ips))
+  all_masters = set(var.master_ips)
+  all_workers = set(var.worker_ips)
+  cluster_fqdn = "${var.cluster_name}.${var.base_domain}"
 }
 
 # HAProxy load balancer provisioning
