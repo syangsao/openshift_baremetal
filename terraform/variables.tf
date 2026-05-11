@@ -102,11 +102,3 @@ variable "iDRAC_password" {
   type        = string
   sensitive   = true
 }
-
-# Derived values
-locals {
-  all_nodes   = setunion([var.bootstrap_ip], set(var.master_ips), set(var.worker_ips))
-  all_masters = set(var.master_ips)
-  all_workers = set(var.worker_ips)
-  cluster_fqdn = "${var.cluster_name}.${var.base_domain}"
-}
