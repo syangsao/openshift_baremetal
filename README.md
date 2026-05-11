@@ -5,21 +5,21 @@ Step-by-step instructions for installing **OpenShift Container Platform 4.21** o
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                      Dell R630 Servers                       │
-│                                                              │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │  Bootstrap   │  │  Master 0-2  │  │  Worker 0-N  │       │
-│  │  (RHCOS)     │  │  (RHCOS)     │  │  (RHCOS)     │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-└──────────────────────────┬───────────────────────────────────┘
-                           │
-              ┌─────────────┴─────────────┐
-              │   HAProxy Load Balancer   │
-              │                           │
-              │  :6443 → masters:6443     │
-              │  :22623 → nodes:22623     │
-              └───────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                       Dell R630 Servers                        │
+│                                                                │
+│         ┌────────────┐  ┌────────────┐  ┌────────────┐         │
+│         │ Bootstrap  │  │ Master 0-2 │  │ Worker 0-N │         │
+│         │  (RHCOS)   │  │  (RHCOS)   │  │  (RHCOS)   │         │
+│         └────────────┘  └────────────┘  └────────────┘         │
+└───────────────────────────────┬────────────────────────────────┘
+                                 │
+┌────────────────────────────────────────────────────────────────┐
+│                     HAProxy Load Balancer                      │
+│                                                                │
+│ :6443 → masters:6443                                           │
+│ :22623 → nodes:22623                                           │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ## Quick Start
@@ -44,13 +44,21 @@ Step-by-step instructions for installing **OpenShift Container Platform 4.21** o
 
 ```
 terraform/
-├── main.tf              # Providers and resources
+├── main.tf              # Modules and providers
 ├── variables.tf         # Input variables
 ├── outputs.tf           # Outputs
-├── providers.tf         # Provider configurations
-├── network.tf           # Bridge/vLAN configuration
-├── haproxy.tf           # Load balancer provisioning
-└── dns.tf               # DNS records
+├── terraform.tfvars     # Sample variable values
+├── Makefile             # Common operations
+├── haproxy/
+│   ├── main.tf
+│   └── haproxy.cfg.tpl  # Load balancer template
+├── dns/
+│   ├── main.tf
+│   └── forward.zone.tpl # DNS zone template
+├── idrac/
+│   └── main.tf          # iDRAC virtual media
+└── network/
+    └── main.tf          # Network config
 ```
 
 ## License

@@ -5,23 +5,23 @@ This step installs Red Hat CoreOS (RHCOS) on each Dell R630 node using the boot.
 ## 4.1 Overview
 
 ```
-┌─────────────────┐         ┌─────────────────┐
-│  Provisioner    │         │  Dell R630      │
-│                 │         │                 │
-│  HTTP Server    │──HTTP──▶│  iDRAC          │
-│  :8080/*.ign    │         │  (Virtual Media)│
-│  :8081/*.iso    │         │                 │
-└─────────────────┘         └────────┬────────┘
-                                     │ KVM/IPMI
-                              ┌──────┴──────┐
-                              │  R630 Server │
-                              │              │
-                              │  Boot ISO   │
-                              │  Configure  │
-                              │  Network    │
-                              │  Install    │
-                              │  RHCOS      │
-                              └─────────────┘
+┌───────────────────┐         ┌───────────────────┐
+│    Provisioner    │         │     Dell R630     │
+│                   │         │                   │
+│ HTTP Server       │   ──▶   │ iDRAC             │
+│ :8080/*.ign       │         │ (Virtual Media)   │
+│ :8081/*.iso       │         │                   │
+└───────────────────┘         └─────────┴─────────┘
+                                         │ KVM/IPMI
+                                 ┌───────────────┐
+                                 │  R630 Server  │
+                                 │               │
+                                 │   Boot ISO    │
+                                 │   Configure   │
+                                 │    Network    │
+                                 │    Install    │
+                                 │     RHCOS     │
+                                 └───────────────┘
 ```
 
 ## 4.2 Prepare Dell iDRAC
@@ -43,11 +43,11 @@ This step installs Red Hat CoreOS (RHCOS) on each Dell R630 node using the boot.
 
 ```bash
 # From the provisioner
-ipmitool -H <iDRAC_IP> -U root -P <password>   channel setcap 1 user 4
+ipmitool -H <iDRAC_IP> -U root -P <password> channel setcap 1 user 4
 
-ipmitool -H <iDRAC_IP> -U root -P <password>   ispset name "VirtualMedia.CDROM.ImageName"   value "http://<provisioner_ip>:8081/rhcos-live.x86_64.iso"
+ipmitool -H <iDRAC_IP> -U root -P <password> ispset name "VirtualMedia.CDROM.ImageName" value "http://<provisioner_ip>:8081/rhcos-live.x86_64.iso"
 
-ipmitool -H <iDRAC_IP> -U root -P <password>   raw 0x3a 0x01 0x04 0x02 0x00
+ipmitool -H <iDRAC_IP> -U root -P <password> raw 0x3a 0x01 0x04 0x02 0x00
 ```
 
 ### Set Boot Order
@@ -56,8 +56,8 @@ ipmitool -H <iDRAC_IP> -U root -P <password>   raw 0x3a 0x01 0x04 0x02 0x00
 2. Set **Virtual Media CD/DVD** as first boot device
 3. Or use IPMI:
 ```bash
-ipmitool -H <iDRAC_IP> -U root -P <password>   chassis bootdev cdrom
-ipmitool -H <iDRAC_IP> -U root -P <password>   chassis power cycle
+ipmitool -H <iDRAC_IP> -U root -P <password> chassis bootdev cdrom
+ipmitool -H <iDRAC_IP> -U root -P <password> chassis power cycle
 ```
 
 ## 4.3 Boot and Configure Each Node
@@ -78,7 +78,7 @@ The installer needs a working network to fetch the Ignition config.
 
 ```bash
 # Create a NetworkManager connection for the primary interface
-nmcli con add type ethernet ifname eno1 con-name system-connection ipv4.method manual   ipv4.addresses 10.0.1.11/24   ipv4.gateway 10.0.1.1   ipv4.dns 10.0.0.11
+nmcli con add type ethernet ifname eno1 con-name system-connection ipv4.method manual ipv4.addresses 10.0.1.11/24 ipv4.gateway 10.0.1.1 ipv4.dns 10.0.0.11
 
 nmcli con up system-connection
 
@@ -105,7 +105,7 @@ lsblk
 # Dell R630 with PERC: /dev/sda (RAID virtual disk)
 
 # Install RHCOS with Ignition config
-coreos-installer install   --copy-network   --ignition-url=http://<provisioner_ip>:8080/<node_type>.ign   /dev/sda
+coreos-installer install --copy-network --ignition-url=http://<provisioner_ip>:8080/<node_type>.ign /dev/sda
 
 # Where <node_type> is:
 #   bootstrap.ign  — for the bootstrap node
@@ -115,12 +115,12 @@ coreos-installer install   --copy-network   --ignition-url=http://<provisioner_i
 
 **Example for Bootstrap Node:**
 ```bash
-coreos-installer install   --copy-network   --ignition-url=http://10.0.0.10:8080/bootstrap.ign   /dev/sda
+coreos-installer install --copy-network --ignition-url=http://10.0.0.10:8080/bootstrap.ign /dev/sda
 ```
 
 **Example for Master0:**
 ```bash
-coreos-installer install   --copy-network   --ignition-url=http://10.0.0.10:8080/master.ign   /dev/sda
+coreos-installer install --copy-network --ignition-url=http://10.0.0.10:8080/master.ign /dev/sda
 ```
 
 ### Installation Flags Explained
@@ -135,7 +135,7 @@ coreos-installer install   --copy-network   --ignition-url=http://10.0.0.10:8080
 
 ```bash
 # After coreos-installer completes, unmount and reboot
-ipmitool -H <iDRAC_IP> -U root -P <password>   chassis power reset
+ipmitool -H <iDRAC_IP> -U root -P <password> chassis power reset
 ```
 
 ## 4.4 Dell R630-Specific BIOS Settings
@@ -177,7 +177,7 @@ After installing RHCOS on all nodes:
 # From the provisioner, SSH to each node
 for ip in 10.0.1.11 10.0.1.12 10.0.1.13 10.0.1.14 10.0.1.21 10.0.1.22; do
   echo "=== Checking $ip ==="
-  ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no core@$ip     'hostname && ip addr show eno1 | grep inet && systemctl status coreos-installer-firstboot-complete'
+  ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no core@$ip 'hostname && ip addr show eno1 | grep inet && systemctl status coreos-installer-firstboot-complete'
 done
 ```
 
